@@ -253,16 +253,7 @@ evergen/
 39. Write `orchestration/definitions.py`: assemble the `Definitions` object with all assets, resources, schedules, and asset checks.
 40. Run `dagster dev` and verify: (a) all assets appear in the Dagster UI, (b) manual materialization of the full graph succeeds, (c) asset checks pass.
 
-### Phase 10: README and Documentation
-
-41. Write `README.md` with: prerequisites, Snowflake setup instructions (role/schema creation SQL snippets), dlt secrets.toml format, dbt profiles.yml format, step-by-step run instructions (`dlt run`, `dbt build`, `dagster dev`), and a summary of the business questions answered by each mart.
-
-### Phase 11: Strategy Narrative (Part 2)
-
-42. Draft the 6-slide strategy deck addressing: (1) title/context, (2) what was found in the data, (3) data trust framework, (4) data quality as shared responsibility, (5) single source of truth architecture, (6) eliminating silos — roadmap.
-43. Export as PDF to `strategy/evergen_data_strategy.pdf`.
-
-### Phase 12: Final Packaging
+### Phase 10: Final Packaging
 
 44. Run the full pipeline end-to-end one final time from a clean state to confirm reproducibility.
 45. Verify `.gitignore` excludes all secrets, credentials, dbt `target/`, dlt state, and compiled artifacts.
