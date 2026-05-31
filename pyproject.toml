@@ -1,0 +1,35 @@
+[project]
+name = "evergen-data-platform"
+version = "0.1.0"
+description = "Dagster-orchestrated data pipeline for Evergen — ingestion, transformation, and mart delivery"
+requires-python = ">=3.11"
+readme = "README.md"
+dependencies = [
+    # Orchestration
+    "dagster>=1.7,<2.0",
+    "dagster-webserver>=1.7,<2.0",
+    "dagster-dbt>=0.23,<1.0",
+    "dagster-embedded-elt>=0.23,<1.0",
+    # Ingestion
+    "dlt[snowflake,duckdb]>=0.5",
+    # Transformation
+    "dbt-core>=1.8,<2.0",
+    "dbt-snowflake>=1.8,<2.0",
+    "dbt-duckdb>=1.8,<2.0",
+    # Utilities
+    "python-dotenv>=1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.dagster]
+module_name = "orchestration.definitions"
+code_location_name = "evergen"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

@@ -10,6 +10,25 @@ See `PLAN.md` for the full implementation specification, directory layout, and o
 
 ---
 
+## Python Tooling
+
+**Use `uv` for all Python environment and dependency work.** Do not use `pip`, `pip-tools`, or `python -m venv` directly.
+
+| Task | Command |
+|------|---------|
+| Create / activate environment | `uv sync` (creates `.venv` automatically) |
+| Install dev dependencies | `uv sync --group dev` |
+| Add a new package | `uv add <package>` |
+| Add a dev-only package | `uv add --group dev <package>` |
+| Run a command in the venv | `uv run <command>` |
+| Update lockfile after editing pyproject.toml | `uv lock` |
+
+Dependencies live in `pyproject.toml` (`[project.dependencies]` for runtime, `[dependency-groups] dev` for test/lint). The `uv.lock` file is committed and pins the full dependency tree. There is no `requirements.txt`.
+
+In code blocks and commands throughout this file and in the README, prefix Python commands with `uv run` so they execute inside the managed environment without requiring manual activation.
+
+---
+
 ## Git Workflow
 
 - **Never commit directly to `main`.** All changes come in via a feature branch and PR.
@@ -57,10 +76,10 @@ dbt profiles.yml uses environment variable interpolation so the same models run 
 **Always validate dbt transforms locally against DuckDB before running against Snowflake.** The workflow is:
 
 1. Run `docker compose up` to start local services
-2. Run dlt ingestion to DuckDB: `EVERGEN_ENV=local python -m ingestion.pipeline`
-3. Run dbt against DuckDB: `EVERGEN_ENV=local dbt build --target local`
+2. Run dlt ingestion to DuckDB: `EVERGEN_ENV=local uv run python -m ingestion.pipeline`
+3. Run dbt against DuckDB: `EVERGEN_ENV=local uv run dbt build --target local`
 4. Confirm all models build and all tests pass
-5. Only then run against Snowflake: `EVERGEN_ENV=prod dbt build --target prod`
+5. Only then run against Snowflake: `EVERGEN_ENV=prod uv run dbt build --target prod`
 
 DuckDB is **not optional** for this workflow — it is the required local validation layer.
 
@@ -107,29 +126,29 @@ The `local.duckdb` file is gitignored. Do not commit it.
 
 ```bash
 # Unit tests only (fast, no warehouse required)
-pytest tests/unit/ -v
+uv run pytest tests/unit/ -v
 
 # dbt tests against local DuckDB
-EVERGEN_ENV=local dbt test --target local
+EVERGEN_ENV=local uv run dbt test --target local
 
 # Full integration test suite (DuckDB, requires docker compose up)
-pytest tests/integration/ -v
+uv run pytest tests/integration/ -v
 
 # Everything
-pytest && EVERGEN_ENV=local dbt test --target local
+uv run pytest && EVERGEN_ENV=local uv run dbt test --target local
 ```
 
 ### PR Merge Gate
 
 A PR cannot be merged unless:
-- All `pytest` unit tests pass
+- All `uv run pytest` unit tests pass
 - All `dbt test` ERROR-severity tests pass against DuckDB (WARN is acceptable)
 
 ### CI/CD Deploy Gate
 
 CI/CD will not deploy to prod unless **both** of the following pass:
-- Unit tests (`pytest tests/unit/`)
-- Integration tests (`pytest tests/integration/`) — runs against DuckDB in CI
+- Unit tests (`uv run pytest tests/unit/`)
+- Integration tests (`uv run pytest tests/integration/`) — runs against DuckDB in CI
 
 Do not skip or suppress test failures to unblock a deploy. Fix the test or revert the change.
 
@@ -164,23 +183,30 @@ The following files must **never** be committed to git:
 ## Common Commands Reference
 
 ```bash
+# Environment setup
+uv sync --group dev                                                   # install all deps + dev tools
+
 # Local development
 docker compose up -d
-EVERGEN_ENV=local python -m ingestion.pipeline          # ingest to DuckDB
-EVERGEN_ENV=local dbt build --target local              # build + test dbt in DuckDB
-EVERGEN_ENV=local dagster dev                           # Dagster UI against local
+EVERGEN_ENV=local uv run python -m ingestion.pipeline                 # ingest to DuckDB
+EVERGEN_ENV=local uv run dbt build --target local --project-dir transform/
+EVERGEN_ENV=local uv run dagster dev                                  # Dagster UI against local
 
-# Production (only after local validation)
-EVERGEN_ENV=prod python -m ingestion.pipeline           # ingest to Snowflake
-EVERGEN_ENV=prod dbt build --target prod                # build + test in Snowflake
-EVERGEN_ENV=prod dagster asset materialize --select "*" # full prod materialization
+# Production (only after local validation passes)
+EVERGEN_ENV=prod uv run python -m ingestion.pipeline                  # ingest to Snowflake
+EVERGEN_ENV=prod uv run dbt build --target prod --project-dir transform/
+EVERGEN_ENV=prod uv run dagster asset materialize --select "*"
 
 # Testing
-pytest tests/unit/ -v
-pytest tests/integration/ -v
-EVERGEN_ENV=local dbt test --target local
+uv run pytest tests/unit/ -v
+uv run pytest tests/integration/ -v
+EVERGEN_ENV=local uv run dbt test --target local --project-dir transform/
 
 # dbt utilities
-dbt docs generate && dbt docs serve                     # browse docs locally
-dbt deps                                                # install packages after packages.yml changes
+uv run dbt docs generate && uv run dbt docs serve --project-dir transform/
+uv run dbt deps --project-dir transform/                              # after packages.yml changes
+
+# Docker (full stack)
+docker compose up -d
+docker compose down
 ```
