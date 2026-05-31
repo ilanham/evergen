@@ -8,10 +8,8 @@
 
 Evergen is a regulated biomaterials company (FDA/AATB). Two siloed source systems — an Order Management System and a Warehouse Fulfillment System — have never been formally integrated. The task is to:
 
-1. **Part 1 (Technical)**: Build a working data pipeline that ingests two CSV exports, models them into a governed structure, and produces mart tables answering three specific business questions about order fill rates, unfulfilled orders, and unmatched fulfillment records.
-2. **Part 2 (Strategy)**: Deliver a 6-slide deck addressing data trust, quality as shared responsibility, single source of truth, and silo elimination.
-
-**Dagster is a non-optional requirement.** The pipeline must be wrapped in Dagster software-defined assets (SDAs) to demonstrate production readiness.
+- Build a working data pipeline that ingests two CSV exports, models them into a governed structure, and produces mart tables answering three specific business questions about order fill rates, unfulfilled orders, and unmatched fulfillment records.
+- The pipeline must be wrapped in Dagster software-defined assets (SDAs) to demonstrate production readiness.
 
 ---
 
@@ -19,10 +17,11 @@ Evergen is a regulated biomaterials company (FDA/AATB). Two siloed source system
 
 | Tool | Role | Optional? |
 |------|------|-----------|
-| **Dagster** | Orchestration — all assets defined as SDAs | NO — hard requirement |
-| **dlt** | Ingestion — CSV to Snowflake RAW schema | Preferred |
+| **Dagster** | Orchestration — all assets defined as SDAs | Required |
+| **dlt** | Ingestion — CSV to Snowflake RAW schema | Required |
 | **dbt** | Transformation, modeling, data quality tests | Required |
 | **Snowflake** | Destination data warehouse | Required |
+| **DuckDB** | Local data warehouse testing | Optional |
 
 ---
 
