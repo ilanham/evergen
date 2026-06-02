@@ -25,8 +25,8 @@ class DltPipelineResource(ConfigurableResource):
             dataset_name="raw",
         )
 
-    def run_orders(self) -> dlt.load_info:
+    def run_orders(self):
         return self.build_pipeline().run(orders_resource())
 
-    def run_fulfillment(self) -> dlt.load_info:
+    def run_fulfillment(self):
         return self.build_pipeline().run(fulfillment_resource())
