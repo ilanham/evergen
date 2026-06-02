@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from dagster import AssetExecutionContext
@@ -18,4 +19,5 @@ dbt_project.prepare_if_dev()
 
 @dbt_assets(manifest=dbt_project.manifest_path)
 def evergreen_dbt_assets(context: AssetExecutionContext, dbt: DbtCliResource):
-    yield from dbt.cli(["build"], context=context).stream()
+    target = os.getenv("EVERGEN_ENV", "local")
+    yield from dbt.cli(["build", "--target", target], context=context).stream()
