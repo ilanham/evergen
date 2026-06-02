@@ -10,6 +10,6 @@ if [[ ! -f "${ENV_FILE}" ]]; then
 fi
 
 echo "Starting Dagster with env: ${ENV} (${ENV_FILE})"
-ENV_FILE="${ENV_FILE}" docker compose up -d
+ENV_FILE="${ENV_FILE}" docker-compose up -d
 
 echo "Dagster UI: http://localhost:3000"
