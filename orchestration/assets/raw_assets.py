@@ -10,7 +10,12 @@ def raw_orders(context: AssetExecutionContext, dlt_pipeline: DltPipelineResource
     context.log.info(str(load_info))
 
 
-@asset(key=AssetKey(["raw", "fulfillment"]), group_name="raw", compute_kind="dlt")
+@asset(
+    key=AssetKey(["raw", "fulfillment"]),
+    deps=[AssetKey(["raw", "orders"])],
+    group_name="raw",
+    compute_kind="dlt",
+)
 def raw_fulfillment(context: AssetExecutionContext, dlt_pipeline: DltPipelineResource):
     """Ingest source2_fulfillment.csv into the raw warehouse layer via dlt."""
     load_info = dlt_pipeline.run_fulfillment()
