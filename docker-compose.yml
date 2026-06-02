@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - .env.local
+      - ${ENV_FILE:-.env.local}
     environment:
       DAGSTER_HOME: /dagster_home
       DUCKDB_PATH: /app/local.duckdb
@@ -17,7 +17,7 @@ services:
     build: .
     command: dagster-daemon run
     env_file:
-      - .env.local
+      - ${ENV_FILE:-.env.local}
     environment:
       DAGSTER_HOME: /dagster_home
       DUCKDB_PATH: /app/local.duckdb
