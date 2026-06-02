@@ -1,6 +1,20 @@
 # Evergen Data Platform Engineer — Case Study Implementation Plan
 
-> **Status**: Planning only. No code assets exist yet. This document is the complete specification for a future Claude session to implement.
+> **Status** (updated 2026-06-02): Implementation substantially complete. Phases 0–9 fully implemented and validated against DuckDB. One item remains open: integration tests (`tests/integration/`).
+>
+> | Phase | Status |
+> |-------|--------|
+> | 0 — Scaffolding | ✅ Done |
+> | 1 — dlt Ingestion | ✅ Done — pipeline runs successfully against DuckDB |
+> | 2 — dbt Project Setup | ✅ Done — packages installed, sources declared |
+> | 3 — dbt Macros | ✅ Done — `normalize_date`, `normalize_sku`, `generate_schema_name` |
+> | 4 — dbt Staging Models | ✅ Done — `stg_orders`, `stg_fulfillment` with full YAML docs |
+> | 5 — dbt Intermediate Models | ✅ Done — `int_order_match_map`, `int_orders_fulfillment_joined` |
+> | 6 — dbt Mart Models | ✅ Done — all three mart tables with YAML docs |
+> | 7 — dbt Singular Tests | ✅ Done — all three `.sql` assert tests present |
+> | 8 — dbt Build & Test | ✅ Done — `dbt build` last ran 2026-06-02: 51 pass, 5 success |
+> | 9 — Dagster Integration | ✅ Done — all assets, resources, checks, schedule, definitions wired; 9 historical runs in DAGSTER_HOME |
+> | 10 — Final Packaging | ⚠️ Partial — README ✅, .gitignore ✅; **missing**: `tests/integration/` (empty) |
 
 ---
 
@@ -152,9 +166,6 @@ evergen/
 │       ├── __init__.py
 │       └── pipeline_schedule.py    # ScheduleDefinition (daily cron)
 │
-├── strategy/                        # Part 2 — strategy narrative
-│   └── evergen_data_strategy.pdf   # (or .key / .pptx)
-│
 ├── pyproject.toml                   # Python project config + Dagster workspace pointer
 ├── requirements.txt                 # Python dependencies
 └── .claude/
@@ -188,7 +199,7 @@ evergen/
 1. Initialize Python project: create `pyproject.toml` with project metadata, `requirements.txt` with pinned dependencies (dagster, dagster-dbt, dagster-embedded-elt, dlt[snowflake], dbt-snowflake, dbt-utils, dbt-expectations).
 2. Create virtual environment and install dependencies.
 3. Create `.env.example` documenting all required environment variables (Snowflake credentials, DAGSTER_HOME).
-4. Initialize the `ingestion/`, `transform/`, `orchestration/`, and `strategy/` directories with `__init__.py` files where appropriate.
+4. Initialize the `ingestion/`, `transform/`, and `orchestration/` directories with `__init__.py` files where appropriate.
 5. Create `pyproject.toml` Dagster workspace entry pointing to `orchestration/definitions.py`.
 
 ### Phase 1: dlt Ingestion
