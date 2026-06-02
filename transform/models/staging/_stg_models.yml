@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Cleaned and normalized orders from OMS. Dates parsed to DATE type; canonical_sku stripped of hyphens for cross-system joins; null region coalesced to UNKNOWN."
+    columns:
+      - name: order_id
+        description: "PK — integer assigned by OMS"
+        tests:
+          - not_null
+          - unique
+      - name: customer_code
+        description: "Reliable customer join key (CUST-NNN format)"
+        tests:
+          - not_null
+      - name: product_code
+        description: "Original hyphen-delimited product code from OMS"
+        tests:
+          - not_null
+      - name: canonical_sku
+        description: "Normalized SKU (uppercase, no hyphens) for joining to fulfillment.canonical_sku"
+        tests:
+          - not_null
+      - name: ordered_qty
+        description: "Quantity requested"
+        tests:
+          - not_null
+      - name: order_date
+        description: "Parsed order date — source uses mixed MM/DD/YYYY and YYYY-MM-DD formats"
+        tests:
+          - not_null
+      - name: region
+        description: "Sales region. Source nulls coalesced to UNKNOWN — no rows dropped."
+        meta:
+          data_quality_note: "5 of 20 source rows had null region (order_ids 1005, 1009, 1010, 1015, 1018)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['SOUTH', 'NORTHEAST', 'MIDWEST', 'WEST', 'SOUTHEAST', 'UNKNOWN']
+
+  - name: stg_fulfillment
+    description: "Cleaned and deduplicated fulfillment records from the warehouse system. F-2013 duplicate resolved by keeping the latest ship_date row."
+    columns:
+      - name: fulfillment_id
+        description: "PK — deduplicated; one row per F-NNNN identifier"
+        tests:
+          - not_null
+          - unique
+      - name: order_ref
+        description: "FK to stg_orders.order_id. Null for ~14% of records where warehouse did not capture an order reference."
+        meta:
+          data_quality_note: "F-2005, F-2015, and F-2099 have null order_ref"
+      - name: raw_sku
+        description: "Original no-hyphen SKU from warehouse system (e.g. TIS001GF)"
+        tests:
+          - not_null
+      - name: canonical_sku
+        description: "Normalized SKU (uppercase, no hyphens) matching stg_orders.canonical_sku"
+        tests:
+          - not_null
+      - name: shipped_qty
+        description: "Actual quantity shipped"
+        tests:
+          - not_null
+      - name: ship_date
+        description: "Shipment date — source is consistently YYYY-MM-DD"
+        tests:
+          - not_null
+      - name: carrier
+        description: "Shipping carrier"
+        meta:
+          data_quality_note: "Sparsely populated in source"
+        tests:
+          - accepted_values:
+              values: ['FedEx', 'UPS']
+              config:
+                where: "carrier is not null"
+      - name: _is_duplicate
+        description: "True when this fulfillment_id appeared more than once in the source — indicates a reship or corrected record"
+      - name: is_partial_shipment
+        description: "Derived from notes field — true when notes contain the word 'partial'"
