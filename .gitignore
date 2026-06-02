@@ -105,6 +105,7 @@ logs/
 .dlt/local.toml
 # Keep .dlt/config.toml (non-secret) — but ignore pipeline state
 .dlt/pipelines/
+.dlt/pipelines_prod/
 pipeline_state/
 
 # -----------------------------------------------------------------------------

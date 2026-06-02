@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import dlt
 
@@ -7,6 +8,9 @@ from ingestion.sources.orders import orders_resource
 
 _ENV = os.getenv("EVERGEN_ENV", "local")
 _DUCKDB_PATH = os.getenv("DUCKDB_PATH", "local.duckdb")
+
+_ROOT = Path(__file__).parents[1]
+_PIPELINES_DIR = _ROOT / ".dlt" / ("pipelines_prod" if _ENV == "prod" else "pipelines")
 
 
 @dlt.source(name="evergen")
@@ -24,6 +28,7 @@ def build_pipeline() -> dlt.Pipeline:
         pipeline_name="evergen_ingestion",
         destination=destination,
         dataset_name="raw",
+        pipelines_dir=str(_PIPELINES_DIR),
     )
 
 

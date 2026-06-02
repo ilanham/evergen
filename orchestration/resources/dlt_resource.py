@@ -6,8 +6,8 @@ from dagster import ConfigurableResource
 from ingestion.sources.fulfillment import fulfillment_resource
 from ingestion.sources.orders import orders_resource
 
-# Resolves to <project_root>/.dlt/pipelines — gitignored, inside the bind mount.
-_PIPELINES_DIR = Path(__file__).parents[2] / ".dlt" / "pipelines"
+_PIPELINES_DIR_LOCAL = Path(__file__).parents[2] / ".dlt" / "pipelines"
+_PIPELINES_DIR_PROD  = Path(__file__).parents[2] / ".dlt" / "pipelines_prod"
 
 
 class DltPipelineResource(ConfigurableResource):
@@ -22,11 +22,13 @@ class DltPipelineResource(ConfigurableResource):
         else:
             destination = dlt.destinations.duckdb(self.duckdb_path)
 
+        pipelines_dir = _PIPELINES_DIR_PROD if self.env == "prod" else _PIPELINES_DIR_LOCAL
+
         return dlt.pipeline(
             pipeline_name="evergen_ingestion",
             destination=destination,
             dataset_name="raw",
-            pipelines_dir=str(_PIPELINES_DIR),
+            pipelines_dir=str(pipelines_dir),
         )
 
     def _clean_pipeline(self) -> dlt.Pipeline:
