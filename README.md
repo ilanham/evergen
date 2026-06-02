@@ -1,6 +1,6 @@
 # Evergen Data Platform
 
-A Dagster-orchestrated data pipeline that ingests order and fulfillment data from two siloed CSV sources, applies dbt transformations, and delivers three mart tables answering key business questions about fill rates, unfulfilled orders, and unmatched fulfillments.
+A Dagster-orchestrated data pipeline that ingests order and fulfillment data from two siloed CSV sources, applies dbt transformations, and delivers three mart views answering key business questions about fill rates, unfulfilled orders, and unmatched fulfillments.
 
 **Stack:** Python 3.11 · Dagster · dlt · dbt · Snowflake (prod) · DuckDB (local)
 
@@ -122,31 +122,48 @@ Dagster UI will be available at `http://localhost:3000`.
 
 ## Running the Pipeline
 
-### Local-first workflow (required before every prod run)
+### Via Dagster (primary workflow)
+
+Dagster orchestrates the full pipeline: dlt ingestion → dbt transforms → asset checks. A daily schedule runs automatically at **06:00 UTC**.
 
 ```bash
-# 1. Ingest CSVs into DuckDB
+# Start all local services (Dagster webserver, daemon, Postgres)
+docker compose up -d
+
+# Open the Dagster UI
+open http://localhost:3000
+```
+
+In the UI, navigate to **Assets** and click **Materialize all** to run the full graph on demand, or let the 06:00 UTC schedule trigger it automatically.
+
+To run the pipeline from the CLI instead of the UI:
+
+```bash
+EVERGEN_ENV=local uv run dagster asset materialize -m orchestration.definitions --select "*"
+```
+
+> **Simple local dev without Docker:** Run `EVERGEN_ENV=local uv run dagster dev` directly. Dagster uses SQLite for run storage in this mode — no Postgres container needed.
+
+### Manual CLI (step-by-step debugging)
+
+Use these commands when you need to inspect or re-run individual pipeline stages:
+
+```bash
+# Ingest CSVs into DuckDB
 EVERGEN_ENV=local uv run python -m ingestion.pipeline
 
-# 2. Build and test dbt models against DuckDB
+# Build and test dbt models against DuckDB
 EVERGEN_ENV=local uv run dbt build --target local --project-dir transform/
+```
 
-# 3. Confirm all tests pass, then promote to prod
+### Promoting to prod (Snowflake)
+
+Only run after the local validation above passes:
+
+```bash
 EVERGEN_ENV=prod uv run python -m ingestion.pipeline
 EVERGEN_ENV=prod uv run dbt build --target prod --project-dir transform/
 ```
-
-### Via Dagster UI
-
-```bash
-# Local (no Docker required)
-EVERGEN_ENV=local uv run dagster dev
-
-# Via Docker Compose
-docker compose up dagster-webserver dagster-daemon
-```
-
-Open `http://localhost:3000`, navigate to Assets, and materialize the full graph.
 
 ---
 
@@ -170,8 +187,8 @@ uv run pytest tests/unit/ && EVERGEN_ENV=local uv run dbt test --target local --
 
 ## Business Questions Answered
 
-| Mart Table | Question |
-|------------|----------|
+| Mart View | Question |
+|-----------|----------|
 | `marts.mart_fill_rate` | What is the order fill rate by product and region? |
 | `marts.mart_unfulfilled_orders` | Which orders were never fulfilled, and what quantity is at risk? |
 | `marts.mart_unmatched_fulfillments` | Which fulfillment records cannot be traced to any order? |
