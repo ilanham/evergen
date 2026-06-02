@@ -29,7 +29,7 @@ def _validate_date(value: str, field: str, order_id: int) -> None:
 @dlt.resource(
     name="orders",
     write_disposition="replace",
-    schema_contract={"tables": "freeze", "columns": "freeze", "data_type": "freeze"},
+    schema_contract={"columns": "freeze", "data_type": "freeze"},
     columns={
         "order_id":            {"data_type": "bigint", "nullable": False},
         "customer_code":       {"data_type": "text",   "nullable": False},

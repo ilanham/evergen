@@ -28,7 +28,7 @@ def _parse_bool(raw: str) -> bool | None:
 @dlt.resource(
     name="fulfillment",
     write_disposition="replace",
-    schema_contract={"tables": "freeze", "columns": "freeze", "data_type": "freeze"},
+    schema_contract={"columns": "freeze", "data_type": "freeze"},
     columns={
         "fulfillment_id":     {"data_type": "text",   "nullable": False},
         # ~14% null: F-2005, F-2015, F-2099 — load nulls faithfully, resolve in dbt
