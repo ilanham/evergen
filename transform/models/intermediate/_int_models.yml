@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_order_match_map
+    description: >
+      Three-level match map linking fulfillment records to orders.
+      match_type='direct' uses order_ref; 'inferred' uses canonical_sku
+      when the match is unambiguous; 'unmatched_order' and
+      'unmatched_fulfillment' are residuals on each side.
+    columns:
+      - name: order_id
+        description: "Null for unmatched_fulfillment rows"
+      - name: fulfillment_id
+        description: "Null for unmatched_order rows"
+      - name: match_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['direct', 'inferred', 'unmatched_order', 'unmatched_fulfillment']
+
+  - name: int_orders_fulfillment_joined
+    description: "Full join of orders and fulfillment through the match map with derived fill metrics"
+    columns:
+      - name: match_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['direct', 'inferred', 'unmatched_order', 'unmatched_fulfillment']
+      - name: fill_qty
+        description: "Quantity actually shipped; 0 for unmatched orders"
+        tests:
+          - not_null
+      - name: fill_rate
+        description: "fill_qty / ordered_qty; null when ordered_qty is unknown"
+      - name: is_overfilled
+        description: "True when shipped_qty exceeds ordered_qty"
