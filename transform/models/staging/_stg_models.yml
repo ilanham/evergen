@@ -36,7 +36,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['SOUTH', 'NORTHEAST', 'MIDWEST', 'WEST', 'SOUTHEAST', 'UNKNOWN']
+              arguments:
+                values: ['SOUTH', 'NORTHEAST', 'MIDWEST', 'WEST', 'SOUTHEAST', 'UNKNOWN']
 
   - name: stg_fulfillment
     description: "Cleaned and deduplicated fulfillment records from the warehouse system. F-2013 duplicate resolved by keeping the latest ship_date row."
@@ -72,7 +73,8 @@ models:
           data_quality_note: "Sparsely populated in source"
         tests:
           - accepted_values:
-              values: ['FedEx', 'UPS']
+              arguments:
+                values: ['FedEx', 'UPS']
               config:
                 where: "carrier is not null"
       - name: _is_duplicate
