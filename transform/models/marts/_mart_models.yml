@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: mart_fill_rate
+    description: "Order fill rate aggregated by product and region. Covers only direct and inferred matches. Fill rate is capped at 1.0 to exclude data entry anomalies."
+    columns:
+      - name: fill_rate_id
+        description: "Surrogate key on product_code + region"
+        tests:
+          - not_null
+          - unique
+      - name: product_code
+        description: "Canonical SKU (normalized, no hyphens)"
+        tests:
+          - not_null
+      - name: region
+        description: "Sales region (UNKNOWN for orders where source region was null)"
+        tests:
+          - not_null
+      - name: total_ordered_qty
+        tests:
+          - not_null
+      - name: total_shipped_qty
+        tests:
+          - not_null
+      - name: fill_rate_pct
+        description: "Ratio of shipped to ordered quantity, capped at 1.0"
+        tests:
+          - not_null
+
+  - name: mart_unfulfilled_orders
+    description: "Orders with no fulfillment match — the quantity at risk for each"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: qty_at_risk
+        description: "Full ordered quantity — no partial fulfillment was recorded"
+        tests:
+          - not_null
+      - name: customer_code
+        tests:
+          - not_null
+      - name: product_code
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+
+  - name: mart_unmatched_fulfillments
+    description: "Fulfillment records that cannot be traced to any order — volume shipped with no provenance"
+    columns:
+      - name: fulfillment_id
+        tests:
+          - not_null
+          - unique
+      - name: sku
+        description: "Original no-hyphen SKU from warehouse system"
+        tests:
+          - not_null
+      - name: shipped_qty
+        tests:
+          - not_null
+      - name: volume_at_risk
+        description: "Quantity shipped with no matching order record"
+        tests:
+          - not_null

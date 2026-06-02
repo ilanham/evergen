@@ -1,0 +1,46 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Raw tables loaded by dlt from CSV exports"
+
+    tables:
+      - name: orders
+        description: "Order Management System export — source1_orders.csv"
+        columns:
+          - name: order_id
+            description: "PK assigned by OMS (1001–1020)"
+            tests:
+              - not_null
+              - unique
+          - name: customer_code
+            description: "Reliable join key (CUST-NNN format)"
+            tests:
+              - not_null
+          - name: product_code
+            description: "Hyphen-delimited product code (e.g. TIS-001-GF)"
+            tests:
+              - not_null
+          - name: ordered_qty
+            tests:
+              - not_null
+          - name: order_date
+            description: "Raw date string — mixed MM/DD/YYYY and YYYY-MM-DD formats"
+            tests:
+              - not_null
+
+      - name: fulfillment
+        description: "Warehouse Fulfillment System export — source2_fulfillment.csv"
+        columns:
+          - name: fulfillment_id
+            description: "PK in warehouse system (F-NNNN format)"
+            tests:
+              - not_null
+          - name: sku
+            description: "No-hyphen format (e.g. TIS001GF) — normalized in staging"
+            tests:
+              - not_null
+          - name: shipped_qty
+            tests:
+              - not_null

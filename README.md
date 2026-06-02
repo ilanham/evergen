@@ -80,7 +80,7 @@ evergen:
   outputs:
     local:
       type: duckdb
-      path: "{{ env_var('DUCKDB_PATH', '../local.duckdb') }}"
+      path: "{{ env_var('DUCKDB_PATH', 'local.duckdb') }}"
       schema: raw
     prod:
       type: snowflake
