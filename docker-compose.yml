@@ -8,6 +8,7 @@ services:
       - .env.local
     environment:
       DAGSTER_HOME: /dagster_home
+      DUCKDB_PATH: /app/local.duckdb
     volumes:
       - .:/app
       - ./deploy/dagster_home:/dagster_home
@@ -19,6 +20,7 @@ services:
       - .env.local
     environment:
       DAGSTER_HOME: /dagster_home
+      DUCKDB_PATH: /app/local.duckdb
     volumes:
       - .:/app
       - ./deploy/dagster_home:/dagster_home
