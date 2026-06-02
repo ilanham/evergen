@@ -29,8 +29,14 @@ class DltPipelineResource(ConfigurableResource):
             pipelines_dir=str(_PIPELINES_DIR),
         )
 
+    def _clean_pipeline(self) -> dlt.Pipeline:
+        pipeline = self.build_pipeline()
+        if pipeline.has_pending_data:
+            pipeline.drop_pending_packages()
+        return pipeline
+
     def run_orders(self):
-        return self.build_pipeline().run(orders_resource())
+        return self._clean_pipeline().run(orders_resource())
 
     def run_fulfillment(self):
-        return self.build_pipeline().run(fulfillment_resource())
+        return self._clean_pipeline().run(fulfillment_resource())
