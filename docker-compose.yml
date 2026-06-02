@@ -1,37 +1,13 @@
 services:
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: dagster_user
-      POSTGRES_PASSWORD: dagster_pass
-      POSTGRES_DB: dagster_db
-    ports:
-      - "5433:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dagster_user -d dagster_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - dagster-postgres:/var/lib/postgresql/data
-
   dagster-webserver:
     build: .
     command: dagster-webserver -h 0.0.0.0 -p 3000 -w workspace.yaml
     ports:
       - "3000:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
     env_file:
       - .env.local
     environment:
       DAGSTER_HOME: /dagster_home
-      DAGSTER_POSTGRES_HOST: postgres
-      DAGSTER_POSTGRES_PORT: "5432"
-      DAGSTER_POSTGRES_USER: dagster_user
-      DAGSTER_POSTGRES_PASSWORD: dagster_pass
-      DAGSTER_POSTGRES_DB: dagster_db
     volumes:
       - .:/app
       - ./deploy/dagster_home:/dagster_home
@@ -39,21 +15,10 @@ services:
   dagster-daemon:
     build: .
     command: dagster-daemon run
-    depends_on:
-      postgres:
-        condition: service_healthy
     env_file:
       - .env.local
     environment:
       DAGSTER_HOME: /dagster_home
-      DAGSTER_POSTGRES_HOST: postgres
-      DAGSTER_POSTGRES_PORT: "5432"
-      DAGSTER_POSTGRES_USER: dagster_user
-      DAGSTER_POSTGRES_PASSWORD: dagster_pass
-      DAGSTER_POSTGRES_DB: dagster_db
     volumes:
       - .:/app
       - ./deploy/dagster_home:/dagster_home
-
-volumes:
-  dagster-postgres:
