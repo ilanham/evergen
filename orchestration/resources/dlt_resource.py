@@ -1,10 +1,13 @@
-import os
+from pathlib import Path
 
 import dlt
 from dagster import ConfigurableResource
 
 from ingestion.sources.fulfillment import fulfillment_resource
 from ingestion.sources.orders import orders_resource
+
+# Resolves to <project_root>/.dlt/pipelines — gitignored, inside the bind mount.
+_PIPELINES_DIR = Path(__file__).parents[2] / ".dlt" / "pipelines"
 
 
 class DltPipelineResource(ConfigurableResource):
@@ -23,6 +26,7 @@ class DltPipelineResource(ConfigurableResource):
             pipeline_name="evergen_ingestion",
             destination=destination,
             dataset_name="raw",
+            pipelines_dir=str(_PIPELINES_DIR),
         )
 
     def run_orders(self):
