@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#00000018"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="700" fill="#F7F8FA" rx="12"/>
+
+  <!-- Title -->
+  <text x="390" y="50" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="20" font-weight="700" letter-spacing="1" fill="#1C1C2E">
+    DATA QUALITY RISK AREAS
+  </text>
+
+  <!-- ── Ring segments ─────────────────────────────── -->
+
+  <!-- 1. Ingestion — top-right quadrant (-90° → 0°) -->
+  <path d="M 390,180 A 170,170 0 0,1 560,350 L 485,350 A 95,95 0 0,0 390,255 Z"
+        fill="#3D87C6" stroke="#F7F8FA" stroke-width="5" filter="url(#shadow)"/>
+
+  <!-- 2. Invalid / Uneven Transforms — bottom-right (0° → 90°) -->
+  <path d="M 560,350 A 170,170 0 0,1 390,520 L 390,445 A 95,95 0 0,0 485,350 Z"
+        fill="#E07B3A" stroke="#F7F8FA" stroke-width="5" filter="url(#shadow)"/>
+
+  <!-- 3. Analytics / Reporting Outside Source Control — bottom-left (90° → 180°) -->
+  <path d="M 390,520 A 170,170 0 0,1 220,350 L 295,350 A 95,95 0 0,0 390,445 Z"
+        fill="#7B56B0" stroke="#F7F8FA" stroke-width="5" filter="url(#shadow)"/>
+
+  <!-- 4. Ad-hoc Manual Customizations — top-left (180° → 270°) -->
+  <path d="M 220,350 A 170,170 0 0,1 390,180 L 390,255 A 95,95 0 0,0 295,350 Z"
+        fill="#C0404A" stroke="#F7F8FA" stroke-width="5" filter="url(#shadow)"/>
+
+  <!-- ── Segment numbers ────────────────────────────── -->
+
+  <!-- 1 at -45° r=132 → (483, 257) -->
+  <circle cx="483" cy="257" r="15" fill="white" opacity="0.25"/>
+  <text x="483" y="263" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="16" font-weight="700" fill="white">1</text>
+
+  <!-- 2 at 45° → (483, 443) -->
+  <circle cx="483" cy="443" r="15" fill="white" opacity="0.25"/>
+  <text x="483" y="449" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="16" font-weight="700" fill="white">2</text>
+
+  <!-- 3 at 135° → (297, 443) -->
+  <circle cx="297" cy="443" r="15" fill="white" opacity="0.25"/>
+  <text x="297" y="449" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="16" font-weight="700" fill="white">3</text>
+
+  <!-- 4 at 225° → (297, 257) -->
+  <circle cx="297" cy="257" r="15" fill="white" opacity="0.25"/>
+  <text x="297" y="263" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="16" font-weight="700" fill="white">4</text>
+
+  <!-- ── Center hub ─────────────────────────────────── -->
+  <circle cx="390" cy="350" r="88" fill="white" filter="url(#shadow)"/>
+  <circle cx="390" cy="350" r="85" fill="white" stroke="#E4E6EF" stroke-width="1.5"/>
+  <text x="390" y="344" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="13" font-weight="700" letter-spacing="2" fill="#1C1C2E">DATA</text>
+  <text x="390" y="362" text-anchor="middle"
+        font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="13" font-weight="700" letter-spacing="2" fill="#1C1C2E">QUALITY</text>
+
+  <!-- ── Leader lines and labels ───────────────────── -->
+
+  <!-- 1. Ingestion (top-right) -->
+  <!-- arc midpoint at -45°, r=196 → (529, 211) -->
+  <line x1="529" y1="211" x2="580" y2="168" stroke="#3D87C6" stroke-width="1.5"/>
+  <circle cx="529" cy="211" r="3.5" fill="#3D87C6"/>
+  <line x1="580" y1="168" x2="720" y2="168" stroke="#3D87C6" stroke-width="1.5"/>
+  <text x="587" y="157" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="700" fill="#3D87C6">Ingestion</text>
+  <text x="587" y="175" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">Missing fields, schema drift,</text>
+  <text x="587" y="191" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">format inconsistencies</text>
+
+  <!-- 2. Invalid / Uneven Transforms (bottom-right) -->
+  <!-- arc midpoint at 45°, r=196 → (529, 489) -->
+  <line x1="529" y1="489" x2="580" y2="530" stroke="#E07B3A" stroke-width="1.5"/>
+  <circle cx="529" cy="489" r="3.5" fill="#E07B3A"/>
+  <line x1="580" y1="530" x2="720" y2="530" stroke="#E07B3A" stroke-width="1.5"/>
+  <text x="587" y="519" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="700" fill="#E07B3A">Invalid / Uneven Transforms</text>
+  <text x="587" y="537" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">Logic errors, untested edge</text>
+  <text x="587" y="553" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">cases, model inconsistencies</text>
+
+  <!-- 3. Analytics / Reporting Outside Source Control (bottom-left) -->
+  <!-- arc midpoint at 135°, r=196 → (251, 489) -->
+  <line x1="251" y1="489" x2="200" y2="530" stroke="#7B56B0" stroke-width="1.5"/>
+  <circle cx="251" cy="489" r="3.5" fill="#7B56B0"/>
+  <line x1="200" y1="530" x2="60" y2="530" stroke="#7B56B0" stroke-width="1.5"/>
+  <text x="193" y="519" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="700" fill="#7B56B0">Analytics / Reporting</text>
+  <text x="193" y="537" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="700" fill="#7B56B0">Outside Source Control</text>
+  <text x="193" y="555" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">BI tool transforms, spreadsheet</text>
+  <text x="193" y="571" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">logic, unversioned filters</text>
+
+  <!-- 4. Ad-hoc Manual Customizations (top-left) -->
+  <!-- arc midpoint at 225°, r=196 → (251, 211) -->
+  <line x1="251" y1="211" x2="200" y2="168" stroke="#C0404A" stroke-width="1.5"/>
+  <circle cx="251" cy="211" r="3.5" fill="#C0404A"/>
+  <line x1="200" y1="168" x2="60" y2="168" stroke="#C0404A" stroke-width="1.5"/>
+  <text x="193" y="157" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="700" fill="#C0404A">Ad-hoc Manual</text>
+  <text x="193" y="175" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="700" fill="#C0404A">Customizations</text>
+  <text x="193" y="193" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">Post-transform edits, one-off</text>
+  <text x="193" y="209" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="12" fill="#555">patches outside the pipeline</text>
+
+</svg>

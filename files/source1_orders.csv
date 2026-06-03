@@ -1,0 +1,21 @@
+order_id,customer_code,customer_name,product_code,product_description,ordered_qty,order_date,requested_ship_date,region,rep_id
+1001,CUST-001,Memorial Hospital,TIS-001-GF,Cancellous Bone Graft,5,01/03/2025,01/07/2025,SOUTH,REP-12
+1002,CUST-002,St. Luke's Surgery Center,TIS-002-DBM,Demineralized Bone Matrix,10,2025-01-05,2025-01-09,NORTHEAST,REP-07
+1003,CUST-001,Memorial Hospital,TIS-003-ST,Soft Tissue Patch,3,01/08/2025,01/12/2025,SOUTH,REP-12
+1004,CUST-003,Orthopedic Partners LLC,TIS-001-GF,Cancellous Bone Graft,8,2025-01-10,2025-01-14,MIDWEST,REP-05
+1005,CUST-004,Regional Medical Center,TIS-004-AM,Amniotic Membrane,2,01/13/2025,01/17/2025,,REP-09
+1006,CUST-002,St. Lukes Surgery Center,TIS-002-DBM,DBM Putty,6,2025-01-15,2025-01-19,NORTHEAST,REP-07
+1007,CUST-005,Coastal Spine Institute,TIS-005-CR,Cortical Ring,4,01/17/2025,01/21/2025,WEST,REP-14
+1008,CUST-003,Orthopedic Partners,TIS-003-ST,Soft Tissue Patch,7,2025-01-20,2025-01-24,MIDWEST,REP-05
+1009,CUST-006,University Health System,TIS-001-GF,Cancellous Bone Graft,12,01/22/2025,01/26/2025,,REP-03
+1010,CUST-004,Regional Medical Center,TIS-006-FH,Femoral Head Allograft,1,2025-01-24,2025-01-28,,REP-09
+1011,CUST-007,Advanced Reconstructive Surg,TIS-002-DBM,Demineralized Bone Matrix,9,01/27/2025,01/31/2025,SOUTHEAST,REP-11
+1012,CUST-001,Memorial Hospital,TIS-004-AM,Amniotic Membrane,3,2025-01-29,2025-02-02,SOUTH,REP-12
+1013,CUST-008,Pinnacle Ortho Group,TIS-005-CR,Cortical Ring,5,01/31/2025,02/04/2025,WEST,REP-14
+1014,CUST-005,Coastal Spine Institute,TIS-001-GF,Cancellous Bone Graft,6,2025-02-03,2025-02-07,WEST,REP-14
+1015,CUST-009,Trinity Surgical Associates,TIS-003-ST,Soft Tissue,4,02/05/2025,02/09/2025,,REP-06
+1016,CUST-002,St. Luke's Surgery Center,TIS-006-FH,Femoral Head Allograft,2,2025-02-07,2025-02-11,NORTHEAST,REP-07
+1017,CUST-010,Midwest Bone & Joint,TIS-002-DBM,Demineralized Bone Matrix,8,02/10/2025,02/14/2025,MIDWEST,REP-05
+1018,CUST-006,University Health System,TIS-005-CR,Cortical Ring,3,2025-02-12,2025-02-16,,REP-03
+1019,CUST-003,Orthopedic Partners LLC,TIS-004-AM,Amniotic Membrane,5,02/14/2025,02/18/2025,MIDWEST,REP-05
+1020,CUST-007,Advanced Reconstructive Surg,TIS-001-GF,Cancellous Bone Graft,10,2025-02-17,2025-02-21,SOUTHEAST,REP-11
