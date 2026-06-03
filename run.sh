@@ -5,7 +5,7 @@ COMMAND=${1:-local}
 
 if [[ "${COMMAND}" == "down" ]]; then
   echo "Stopping Dagster containers..."
-  docker compose down
+  docker-compose down
   exit 0
 fi
 
@@ -19,7 +19,7 @@ if [[ ! -f "${ENV_FILE}" ]]; then
 fi
 
 echo "Starting Dagster with env: ${ENV} (${ENV_FILE})"
-ENV_FILE="${ENV_FILE}" docker compose down
-ENV_FILE="${ENV_FILE}" docker compose up -d
+ENV_FILE="${ENV_FILE}" docker-compose down
+ENV_FILE="${ENV_FILE}" docker-compose up -d
 
 echo "Dagster UI: http://localhost:3000"
